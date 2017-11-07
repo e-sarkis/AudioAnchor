@@ -19,11 +19,29 @@ public class AudioAnchorScript : MonoBehaviour
 	// The true Dicitonary to be used in logic
 	public Dictionary<AudioClip, float> ClipsToIntensities = new Dictionary<AudioClip, float>();
 
+
 	void Awake () 
 	{
 		InitializeInstance();
+		source = GetComponent<AudioSource>();
 		PopulateDictionary();
 	}
+
+
+	// Play a sound via this GameObjects AudioSource via given AudioClip name
+	public void PlaySound(string clipName)
+    {
+        foreach (AudioClip clip in ClipsToIntensities.Keys)
+        {
+            if (clipName == clip.name)
+            {
+                source.PlayOneShot(clip, ClipsToIntensities[clip]);
+                return;
+            }
+        }
+        Debug.LogError("AudioAnchor: " + clipName + " AudioClip name not found. Are you sure it's been added to the AudioAnchorScript component?");
+    }
+
 
 	// Populate ClipsToIntensities via ClipIntensityPairArray for use in logic
 	private void PopulateDictionary()
@@ -31,6 +49,7 @@ public class AudioAnchorScript : MonoBehaviour
 		for (int i = 0; i < ClipIntensityPairArray.Length; i++)
             ClipsToIntensities.Add(ClipIntensityPairArray[i].clip, ClipIntensityPairArray[i].intensity);
 	}
+
 
 	// Initialize the instance of this singleton
 	private void InitializeInstance()
