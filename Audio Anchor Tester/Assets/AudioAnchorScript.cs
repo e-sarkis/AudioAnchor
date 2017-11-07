@@ -6,17 +6,17 @@ using UnityEngine;
 public class AudioAnchorScript : MonoBehaviour 
 {
 	public static AudioAnchorScript inst = null;	// the singleton instance
+	[HideInInspector] public AudioSource source;	// AudioSource component
 
-	// The in-editor Dictionary AudioClip->float equivalent
+	// In-editor dictionary pair AudioClip->float equivalent
 	[System.Serializable]
     public struct ClipIntensityPair
     {
         public AudioClip clip;
         public float intensity;
     }
-	public ClipIntensityPair[] ClipIntensityPairArray;
-
-	// The Dicitonary to be used in logic
+	public ClipIntensityPair[] ClipIntensityPairArray;	// For use in-editor
+	// The true Dicitonary to be used in logic
 	public Dictionary<AudioClip, float> ClipsToIntensities = new Dictionary<AudioClip, float>();
 
 	void Awake () 
@@ -29,9 +29,7 @@ public class AudioAnchorScript : MonoBehaviour
 	private void PopulateDictionary()
 	{
 		for (int i = 0; i < ClipIntensityPairArray.Length; i++)
-        {
             ClipsToIntensities.Add(ClipIntensityPairArray[i].clip, ClipIntensityPairArray[i].intensity);
-        }
 	}
 
 	// Initialize the instance of this singleton
