@@ -133,8 +133,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   source: {fileID: 0}
-  ClipIntensityPairArray:
-  - clip: {fileID: 8300000, guid: 03746e909f4ee8d4c9455b08a585c594, type: 3}
-    intensity: 1
-  - clip: {fileID: 8300000, guid: 21ccfadaa989b8642a17c4e3b73b968e, type: 3}
-    intensity: 1
+  ClipIntensityPairArray: []
