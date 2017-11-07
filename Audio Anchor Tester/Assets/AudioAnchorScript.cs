@@ -7,9 +7,31 @@ public class AudioAnchorScript : MonoBehaviour
 {
 	public static AudioAnchorScript inst = null;	// the singleton instance
 
+	// The in-editor Dictionary AudioClip->float equivalent
+	[System.Serializable]
+    public struct ClipIntensityPair
+    {
+        public AudioClip clip;
+        public float intensity;
+    }
+	public ClipIntensityPair[] ClipIntensityPairArray;
+
+	// The Dicitonary to be used in logic
+	public Dictionary<AudioClip, float> ClipsToIntensities = new Dictionary<AudioClip, float>();
+
 	void Awake () 
 	{
 		InitializeInstance();
+		PopulateDictionary();
+	}
+
+	// Populate ClipsToIntensities via ClipIntensityPairArray for use in logic
+	private void PopulateDictionary()
+	{
+		for (int i = 0; i < ClipIntensityPairArray.Length; i++)
+        {
+            ClipsToIntensities.Add(ClipIntensityPairArray[i].clip, ClipIntensityPairArray[i].intensity);
+        }
 	}
 
 	// Initialize the instance of this singleton
