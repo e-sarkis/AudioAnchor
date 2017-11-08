@@ -242,7 +242,12 @@ Prefab:
     - target: {fileID: 114407892624149788, guid: ce4cab78ef3bf95498fa0058de4140b9,
         type: 2}
       propertyPath: ClipIntensityPairArray.Array.size
-      value: 2
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 114407892624149788, guid: ce4cab78ef3bf95498fa0058de4140b9,
+        type: 2}
+      propertyPath: MusicIntensityPairArray.Array.size
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4509570677868670, guid: ce4cab78ef3bf95498fa0058de4140b9, type: 2}
       propertyPath: m_LocalPosition.x
@@ -300,6 +305,31 @@ Prefab:
         type: 2}
       propertyPath: Loop
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114407892624149788, guid: ce4cab78ef3bf95498fa0058de4140b9,
+        type: 2}
+      propertyPath: MusicIntensityPairArray.Array.data[0].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: 8c122aa4d0413e0478c310eab07a6e6f, type: 3}
+    - target: {fileID: 114407892624149788, guid: ce4cab78ef3bf95498fa0058de4140b9,
+        type: 2}
+      propertyPath: MusicIntensityPairArray.Array.data[0].intensity
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 114407892624149788, guid: ce4cab78ef3bf95498fa0058de4140b9,
+        type: 2}
+      propertyPath: ClipIntensityPairArray.Array.data[2].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: 8c122aa4d0413e0478c310eab07a6e6f, type: 3}
+    - target: {fileID: 114407892624149788, guid: ce4cab78ef3bf95498fa0058de4140b9,
+        type: 2}
+      propertyPath: ClipIntensityPairArray.Array.data[2].intensity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114407892624149788, guid: ce4cab78ef3bf95498fa0058de4140b9,
+        type: 2}
+      propertyPath: playSoundEffectsBetweenScenes
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ce4cab78ef3bf95498fa0058de4140b9, type: 2}

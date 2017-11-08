@@ -1,12 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 // AudioAnchor - Audio Management and Playing Singleton
 public class AudioAnchorScript : MonoBehaviour 
 {
-	public static AudioAnchorScript inst = null;	// the singleton instance
-	[HideInInspector] public AudioSource source;	// AudioSource component
+	public static AudioAnchorScript inst = null;		// The singleton instance
+	[HideInInspector] public AudioSource sfxSource;		// SFX AudioSource component
+	[HideInInspector] public AudioSource musicSource;	// Music AudioSource
 
 	public bool playSoundEffectsBetweenScenes = true;
 	public bool playMusicBetweenScenes = true;
@@ -18,34 +20,57 @@ public class AudioAnchorScript : MonoBehaviour
         public AudioClip clip;
         public float intensity;
     }
-	public ClipIntensityPair[] ClipIntensityPairArray;
-	public ClipIntensityPair[] MusicIntensityPairArray;
+	public ClipIntensityPair[] SFXIntensityPairArray;	// Sound FX
+	public ClipIntensityPair[] MusicIntensityPairArray;	// Musical Tracks
 
 
 	void Awake () 
 	{
-		InitializeInstance();
-		source = GetComponent<AudioSource>();
+		InitializeSingletonInstance();
 
-		// For music/audio transitions between scenes
-		if (playSoundEffectsBetweenScenes || playMusicBetweenScenes) DontDestroyOnLoad(this.gameObject);
+		sfxSource = gameObject.AddComponent<AudioSource>();
+		sfxSource.loop = true;
+		sfxSource.playOnAwake = false;
+		musicSource = gameObject.AddComponent<AudioSource>();
+		musicSource.loop = true;
+		musicSource.playOnAwake = false;		
 	}
+
+
+	// Performs functions required when transitioning between scenes.
+	// MUST BE CALLED BEFORE CHANGING SCENES OR AUDIO WILL MAY PERFORM INCORRECTLY
+	public void TransitionScenes()
+	{
+		if (!playSoundEffectsBetweenScenes)
+		{
+			// Stop the source sound effects
+			sfxSource.enabled = false;
+			sfxSource.enabled = true;
+		}
+		if (!playMusicBetweenScenes)
+		{
+			// Stop the source music
+			musicSource.enabled = false;
+			musicSource.enabled = true;
+		}
+    }
 
 
 	// Play a sound via this GameObjects AudioSource via given AudioClip name
 	public void PlaySound(string clipName)
     {
-		for (int i = 0; i < ClipIntensityPairArray.Length; i++)
+		for (int i = 0; i < SFXIntensityPairArray.Length; i++)
 		{
-			if ( clipName == ClipIntensityPairArray[i].clip.name )
+			if ( clipName == SFXIntensityPairArray[i].clip.name )
             {
-                source.PlayOneShot(ClipIntensityPairArray[i].clip, ClipIntensityPairArray[i].intensity);
+                sfxSource.PlayOneShot(SFXIntensityPairArray[i].clip, SFXIntensityPairArray[i].intensity);
                 return;
             }
 		}
         Debug.LogError("AudioAnchor: " + clipName
-						+ " AudioClip name not found. Are you sure it's been added to the AudioAnchorScript component Sounds array?");
+						+ " AudioClip name not found. Are you sure it's been added to the AudioAnchorScript component SFX array?");
     }
+
 
 	// Play looping music via this GameObject's AudioSource via given AudioClip name
 	public void PlayMusic(string musicName)
@@ -54,8 +79,10 @@ public class AudioAnchorScript : MonoBehaviour
 		{
 			if ( musicName == MusicIntensityPairArray[i].clip.name )
             {
-				source.clip = MusicIntensityPairArray[i].clip;
-				source.Play();
+				if (musicSource.isPlaying) return;
+				musicSource.clip = MusicIntensityPairArray[i].clip;
+				musicSource.volume = MusicIntensityPairArray[i].intensity;
+				musicSource.Play();
 				return;
 			}
 			Debug.LogError("AudioAnchor: " + musicName
@@ -64,11 +91,15 @@ public class AudioAnchorScript : MonoBehaviour
 	}
 
 
-	// Initialize the instance of this singleton
-	private void InitializeInstance()
+	// Attempt initialization of the instance of this singleton
+	private void InitializeSingletonInstance()
 	{
-		// Delete the older instance if it exists
-		if (inst == null) inst = this;
+		// Delete the older instance if it exists and isn't this
+		if (inst == null)
+		{
+			inst = this;
+			DontDestroyOnLoad(this.gameObject);
+		} 
         else if (inst != this) Destroy(this.gameObject);
 	}
 }
